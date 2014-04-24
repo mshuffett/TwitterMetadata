@@ -15,13 +15,10 @@ app.config['RECAPTCHA_PUBLIC_KEY'] = \
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tweetid.db'
 db = SQLAlchemy(app)
 
-import models
+import tweetid.models as models
+from tweetid.tsv import process_tsv
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     tweet = models.Tweet.query.first()
     return render_template('index.html', tweet=tweet)
-
-if __name__ == '__main__':
-    db.create_all()
-    app.run(debug=True)
