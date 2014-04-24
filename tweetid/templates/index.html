@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Tweets</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Text</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th>{{ tweet.id }}</th>
+            <th>{{ tweet.text }}</th>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}
