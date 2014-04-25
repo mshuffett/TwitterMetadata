@@ -21,7 +21,7 @@ def init_db():
 
 @manager.command
 def drop_all():
-    """Create db tables."""
+    """Drop all db tables."""
     db.drop_all()
 
 manager.add_option('-c', '--config',
