@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block navbar_active %}
+    <li class="active"><a href="/upload">Upload</a></li>
+    <li><a href="/collections">Collections</a></li>
+    <li><a href="/tweets">Tweets</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/contact">Contact</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="well col-md-6 col-md-offset-3">
+            <div class="center">
+                <h1>Upload a Collection</h1>
+            </div>
+            {{ wtf.quick_form(form, enctype='multipart/form-data', button_map={'submit_button': 'primary'}) }}
+            <a href=""></a>
+{#            <form class="form form-horizontal" method="post" role="form" enctype="multipart/form-data" action="/upload/">#}
+{#                {{ form.hidden_tag() }}#}
+{#                {{ wtf.form_errors(form, hiddens="only") }}#}
+{##}
+{#                {{ wtf.form_field(form.title) }}#}
+{#                {{ wtf.form_field(form.organization) }}#}
+{#            </form>#}
+        </div>
+    </div>
+{% endblock %}

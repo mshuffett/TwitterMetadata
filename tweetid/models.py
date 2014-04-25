@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declared_attr
 
-from tweetid import db
+from tweetid.app import db
 
 
 class ModelMixin(object):
@@ -44,7 +44,7 @@ association_table = db.Table(
 
 
 class Tweet(ModelMixin, db.Model):
-    id = db.Column(db.String, primary_key=True)
+    id = db.Column(db.String, primary_key=True, index=True)
     text = db.Column(db.String)
     created_at = db.Column(db.String)
     screen_name = db.Column(db.String)

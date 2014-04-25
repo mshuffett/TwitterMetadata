@@ -8,7 +8,7 @@ from models import Tweet, Collection
 from tweetid import db
 
 
-_TWEET_FIELDS = ('id', 'text', 'created_at', 'screen_name', 'latitude', 'longitude', 'url_mentions')
+_TWEET_FIELDS = ('id', 'created_at', 'screen_name', 'latitude', 'longitude', 'url_mentions')
 
 
 def unicode_csv_reader(utf8_data, dialect=csv.excel, **kwargs):
@@ -66,9 +66,12 @@ def process_tsv(path, count=0, chunk_size=0):
     """
     collection = Collection()
     gen = tsv_tweet_gen(path, count=count)
-    for tweet in gen:
+    for i, tweet in enumerate(gen, 1):
         tweet.collections.append(collection)
         db.session.add(tweet)
+        if chunk_size > 0 and i % chunk_size == 0:
+            db.session.commit()
+
     db.session.commit()
     # print oollection.start_date, oollection.end_date
 

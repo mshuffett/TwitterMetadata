@@ -1,19 +1,20 @@
 {% extends "base.html" %}
-
 {% block content %}
-    <h2>Tweets</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Text</th>
-            </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <th>{{ tweet.id }}</th>
-            <th>{{ tweet.text }}</th>
-        </tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <div class="content">
+            <div class="jumbotron">
+                <h1>TweetID</h1>
+                <p class="lead">
+                    <strong>TweetID</strong> is a project which supports the open sharing of Twitter metadata.
+                    <strong>TweetID</strong> allows its users to upload unrelated Tweets, or collections of Tweets as well as
+                    access the metadata of previously uploaded Tweets and collections.
+                </p>
+                <div class="btn-actions">
+                    <a href="/upload" class="btn btn-primary btn-lg" role="button">Upload</a>
+                    <a href="/tweets" class="btn btn-primary btn-lg" role="button">View Tweets</a>
+                    <a href="/collections" class="btn btn-primary btn-lg" role="button">View Collections</a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
