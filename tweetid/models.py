@@ -45,7 +45,6 @@ association_table = db.Table(
 
 class Tweet(ModelMixin, db.Model):
     id = db.Column(db.String, primary_key=True, index=True)
-    text = db.Column(db.String)
     created_at = db.Column(db.String)
     screen_name = db.Column(db.String)
     latitude = db.Column(db.String)
