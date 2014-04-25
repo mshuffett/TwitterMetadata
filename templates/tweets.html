@@ -17,14 +17,25 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Text</th>
+                    <th>Created</th>
+                    <th>Screen Name</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>URL Mentions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th>{{ tweet.id }}</th>
-                    <th>{{ tweet.text }}</th>
-                </tr>
+                {% for item in tweets.items %}
+                    <tr>
+                        <th>{{ item.id }}</th>
+                        <th>{{ item.created_at }}</th>
+                        <th>{{ item.screen_name }}</th>
+                        <th>{{ item.latitude }}</th>
+                        <th>{{ item.longitude }}</th>
+                        <th>{{ item.url_mentions }}</th>
+                    </tr>
+                {% endfor %}
+
                 </tbody>
             </table>
 
