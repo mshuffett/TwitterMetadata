@@ -19,6 +19,11 @@ def init_db():
     db.create_all()
 
 
+@manager.command
+def drop_all():
+    """Create db tables."""
+    db.drop_all()
+
 manager.add_option('-c', '--config',
                    dest="config",
                    required=False,
