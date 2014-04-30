@@ -3,6 +3,29 @@
     <li><a href="/upload">Upload</a></li>
     <li><a href="/collections">Collections</a></li>
     <li><a href="/tweets">Tweets</a></li>
-    <li><a href="/about">About</a></li>
+{#    <li><a href="/about">About</a></li>#}
     <li class="active"><a href="/contact">Contact</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="abs-center">
+                <a href="http://linkedin.com/in/mshuffett">
+                    <i class="fa fa-linkedin-square giant-font"></i>
+                </a>
+                <a href="http://facebook.com/mshuffett">
+                    <i class="fa fa-facebook-square giant-font"></i>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+        <div class="center">Designed and programmed by Michael Shuffett.</div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 {% endblock %}

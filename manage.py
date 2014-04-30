@@ -1,10 +1,23 @@
 # -*- coding: utf-8 -*-
+import sys
+
 from flask.ext.script import Manager
 
 from tweetid import app, db
+from tweetid.models import Collection
+from tweetid.tsv import process_tsv
 
 
 manager = Manager(app)
+
+
+@manager.command
+def load_tsv():
+    """Load tsv"""
+    c = Collection(name='Queensland Floods', organization='QCRI', collection_type='keyword',
+                   keywords='#qldflood,#bigwet,queensland flood,australia flood, Missing, #qldfloods, #Bundaberg, queensland, #floods',
+                   year=2013, country='Australia')
+    process_tsv(sys.stdin, chunk_size=1000, collection=c)
 
 
 @manager.command
@@ -24,11 +37,11 @@ def drop_all():
     """Drop all db tables."""
     db.drop_all()
 
+
 manager.add_option('-c', '--config',
                    dest="config",
                    required=False,
                    help="config file")
-
 
 if __name__ == "__main__":
     manager.run()

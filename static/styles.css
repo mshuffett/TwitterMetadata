@@ -19,3 +19,51 @@ body {
 .center {
     text-align: center;
 }
+
+.tweets-count {
+    padding-bottom: 30px;
+}
+
+.more-tweets-btn {
+    border-radius: 0;
+}
+
+.center-y {
+    vertical-align: middle;
+}
+
+.abs-center {
+    /*width: 100vh;*/
+    height: 90vh;
+    overflow: hidden;
+    /*border: 1px solid black;*/
+
+    /* Internet Explorer 10 */
+    display: -ms-flexbox;
+    -ms-flex-pack: center;
+    -ms-flex-align: center;
+
+    /* Firefox */
+    display: -moz-box;
+    -moz-box-pack: center;
+    -moz-box-align: center;
+
+    /* Safari, Opera, and Chrome */
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+
+    /* W3C */
+    display: box;
+    box-pack: center;
+    box-align: center;
+}
+
+.giant-font {
+    font-size: 180px;
+}
+
+.abs-center > a {
+    margin-left: 8px;
+    margin-right: 8px;
+}

@@ -1,0 +1,74 @@
+{% from "pagination.html" import render_pagination %}
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="col-md-8 col-md-offset-2">
+    <div class="center">
+        <h1>{{ collection.name }}</h1>
+
+        <p class="tweets-count">{{ tweets.total }} total</p>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <dl>
+                {% if collection.organization %}
+                    <dt>Organization</dt>
+                    <dd>{{ collection.organization }}</dd>
+                {% endif %}
+                {% if collection.description %}
+                    <dt>Description</dt>
+                    <dd>{{ collection.description }}</dd>
+                {% endif %}
+                {% if collection.collection_type %}
+                    <dt>Collection Type</dt>
+                    <dd>{{ collection.collection_type }}</dd>
+                {% endif %}
+                {% if collection.keywords %}
+                    <dt>Keywords</dt>
+                    <dd>{{ collection.keywords }}</dd>
+                {% endif %}
+                {% if collection.year %}
+                    <dt>Year</dt>
+                    <dd>{{ collection.year }}</dd>
+                {% endif %}
+                {% if collection.country %}
+                    <dt>Country</dt>
+                    <dd>{{ collection.country }}</dd>
+                {% endif %}
+                {% if collection.tags %}
+                    <dt>Tags</dt>
+                    <dd>{{ collection.tags }}</dd>
+                {% endif %}
+            </dl>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Created</th>
+                <th>Screen Name</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>URL Mentions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in tweets.items %}
+                <tr>
+                    <th>{{ item.id }}</th>
+                    <th>{{ item.created_at }}</th>
+                    <th>{{ item.screen_name }}</th>
+                    <th>{{ item.latitude }}</th>
+                    <th>{{ item.longitude }}</th>
+                    <th>{{ item.url_mentions }}</th>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+        <div class="center">
+            {{ render_pagination(tweets, 'collection', name=collection.name) }}
+        </div>
+    </div>
+{% endblock %}

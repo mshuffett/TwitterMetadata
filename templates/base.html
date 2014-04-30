@@ -3,9 +3,10 @@
 
 {% block styles %}
     {{ super() }}
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="{{ url_for('.static', filename='styles.css') }}"/>
-
 {% endblock %}
+
 {% block title %}
     TweetID
 {% endblock %}
@@ -28,16 +29,27 @@
                         <li><a href="/upload">Upload</a></li>
                         <li><a href="/collections">Collections</a></li>
                         <li><a href="/tweets">Tweets</a></li>
-                        <li><a href="/about">About</a></li>
+                        {#                        <li><a href="/about">About</a></li>#}
                         <li><a href="/contact">Contact</a></li>
                     {% endblock %}
                 </ul>
-            </div><!--/.nav-collapse -->
+            </div>
+            <!--/.nav-collapse -->
         </div>
     </div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="col-md-6 col-md-offset-3 alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>Congratulations!</strong> {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 {% endblock %}
 
 {% block head %}
-    {{super()}}
-    {{fixes.ie8()}}
+    {{ super() }}
+    {{ fixes.ie8() }}
 {% endblock %}

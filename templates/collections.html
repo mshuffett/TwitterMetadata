@@ -3,6 +3,95 @@
     <li><a href="/upload">Upload</a></li>
     <li class="active"><a href="/collections">Collections</a></li>
     <li><a href="/tweets">Tweets</a></li>
-    <li><a href="/about">About</a></li>
+    {#    <li><a href="/about">About</a></li>#}
     <li><a href="/contact">Contact</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-8 col-md-offset-2">
+        <div class="center">
+            <h1>Collections</h1>
+        </div>
+
+        {% for org in org_d.iterkeys() %}
+            <h2>{{ org }}</h2>
+            {% set  parent_accordion =  '%s-accordion' % org %}
+            {% set  base_collapse =  '%s-collapse-' % org %}
+            <div class="panel-group" id="{{ parent_accordion }}"></div>
+            {% for collection in org_d[org] %}
+                {% set current_collapse = '%s%s' % (base_collapse, loop.index) %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <a data-toggle="collapse" data-parent="{{ parent_accordion }}"
+                               href="{{ '#' + current_collapse }}">
+                                {{ collection.name }}
+                            </a>
+                        </h3>
+                    </div>
+                    <div id="{{ current_collapse }}" class="panel-collapse collapse {{ 'in' if loop.index == 1 }}">
+                        <div class="panel-body">
+                            <dl>
+                                {% if collection.description %}
+                                    <dt>Description</dt>
+                                    <dd>{{ collection.description }}</dd>
+                                {% endif %}
+                                {% if collection.collection_type %}
+                                    <dt>Collection Type</dt>
+                                    <dd>{{ collection.collection_type }}</dd>
+                                {% endif %}
+                                {% if collection.keywords %}
+                                    <dt>Keywords</dt>
+                                    <dd>{{ collection.keywords }}</dd>
+                                {% endif %}
+                                {% if collection.year %}
+                                    <dt>Year</dt>
+                                    <dd>{{ collection.year }}</dd>
+                                {% endif %}
+                                {% if collection.country %}
+                                    <dt>Country</dt>
+                                    <dd>{{ collection.country }}</dd>
+                                {% endif %}
+                                {% if collection.tags %}
+                                    <dt>Tags</dt>
+                                    <dd>{{ collection.tags }}</dd>
+                                {% endif %}
+                            </dl>
+                        </div>
+                        {% set tweets = collection.tweets.limit(10).all() %}
+                        {% if tweets %}
+
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Created</th>
+                                    <th>Screen Name</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                    <th>URL Mentions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in tweets %}
+                                    <tr>
+                                        <th>{{ item.id }}</th>
+                                        <th>{{ item.created_at }}</th>
+                                        <th>{{ item.screen_name }}</th>
+                                        <th>{{ item.latitude }}</th>
+                                        <th>{{ item.longitude }}</th>
+                                        <th>{{ item.url_mentions }}</th>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <a href="{{ url_for('collection', name=collection.name) }}"
+                               class="btn btn-default btn-lg center-block more-tweets-btn" role="button">View More
+                                Tweets</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
 {% endblock %}

@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import csv
+
 import tarfile
 
 from models import Tweet, Collection
-from tweetid import db
+from tweetid.app import db, app
 
 
 _TWEET_FIELDS = ('id', 'text', 'created_at', 'screen_name', 'latitude', 'longitude', 'url_mentions')
@@ -17,37 +18,39 @@ def unicode_csv_reader(utf8_data, dialect=csv.excel, **kwargs):
         yield [unicode(cell, 'utf-8', 'replace') for cell in row]
 
 
-def tsv_tweet_gen(path, count=0):
-    with open(path) as tsv_file:
-        tsv = unicode_csv_reader(tsv_file, delimiter='\t')
-        for i, row in enumerate(tsv):
-            if row[-1] != '\\N' or row[-2] != '\\N':
-                print row
-                raise Exception('Unexpected format.')
-            row = row[:-2]
+def tsv_tweet_gen(fp, count=0):
+    tsv = unicode_csv_reader(fp, delimiter='\t', quotechar='\x07')
+    for i, row in enumerate(tsv):
+        assert len(row) == 9
+        if row[-1] != '\\N' or row[-2] != '\\N':
+            print row
+            app.logger.error('Unexpected format.\n%s\n%s\t%s' % (row, row[-1], row[-2]))
+            raise Exception('Unexpected format.')
+        row = row[:-2]
 
-            kwargs = {}
-            for i, field in enumerate(_TWEET_FIELDS):
-                if row[i] == '\\N' or field == 'text':
-                    continue
-                kwargs[field] = row[i]
+        kwargs = {}
+        for i, field in enumerate(_TWEET_FIELDS):
+            if row[i] == '\\N' or field == 'text':
+                continue
+            kwargs[field] = row[i]
 
-            yield Tweet(**kwargs)
-            count -= 1
-            if count == 0:
-                break
+        yield Tweet(**kwargs)
+        count -= 1
+        if count == 0:
+            break
 
 
-def process_tsv(path, count=0, chunk_size=0):
+def process_tsv(fp, count=0, chunk_size=0, collection=None):
     """
     Load the tsv at path into database. If count is positive, limit number of tweets to load to count tweets.
     If chunk_size is positive chunk the saves by chunk_size amount.
     """
-    collection = Collection()
-    gen = tsv_tweet_gen(path, count=count)
+    if collection is None:
+        collection = Collection()
+    gen = tsv_tweet_gen(fp, count=count)
     for i, tweet in enumerate(gen, 1):
         tweet.collections.append(collection)
-        db.session.add(tweet)
+        db.session.merge(tweet)
         if chunk_size > 0 and i % chunk_size == 0:
             db.session.commit()
 

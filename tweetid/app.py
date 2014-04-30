@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import logging
-from collections import namedtuple
+from collections import defaultdict
 import os
 
-from flask import Flask, render_template, request
-from flask.ext.migrate import Migrate
+from flask import Flask, render_template, request, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from config import DefaultConfig, INSTANCE_FOLDER_PATH
 from werkzeug.utils import secure_filename
@@ -96,13 +94,12 @@ def configure_logging(app):
 
 app = create_app()
 db = SQLAlchemy(app)
-import tweetid.models as models
-
-Collection = namedtuple('Collection', ['name', 'description'])
+from tweetid.models import Collection, Tweet
+import tsv
 
 
 class UploadForm(Form):
-    title = TextField('Title', validators=[DataRequired()])
+    name = TextField('Collection Name', validators=[DataRequired()])
     organization = TextField('Organization')
     description = TextAreaField('Description', validators=[DataRequired()])
     collection_type = SelectField('Collection Type', choices=[('keyword', 'Keyword Based')])
@@ -123,27 +120,33 @@ class UploadForm(Form):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    tweet = models.Tweet.query.first()
-    c = Collection('name', 'description')
-    collections = [c for x in xrange(10)]
-    return render_template('index.html', tweet=tweet, collections=collections)
+    return render_template('index.html')
 
 
 @app.route('/collections', methods=['GET', 'POST'])
 def collections():
-    c = Collection('name', 'description')
-    collections = [c for x in xrange(10)]
-    return render_template('collections.html', collections=collections)
+    collections = Collection.query.order_by(Collection.organization)
+    org_d = defaultdict(list)
+    for c in collections:
+        org_d[c.organization].append(c)
+    return render_template('collections.html', org_d=org_d)
+
+
+@app.route('/collection/<name>', methods=['GET', 'POST'])
+def collection(name):
+    c = Collection.query.get_or_404(name)
+    page = request.args.get('page', 1)
+    tweets = c.tweets.paginate(int(page))
+    return render_template('collection_details.html', collection=c, tweets=tweets)
 
 
 @app.route('/tweets', methods=['GET', 'POST'])
 def tweets():
     page = request.args.get('page', 1)
     app.logger.info('Tweets page %s' % page)
-    tweet = models.Tweet.query.first()
-    tweets = models.Tweet.query.paginate(int(page))
+    tweets = Tweet.query.paginate(int(page))
     app.logger.info('Pagination page %s' % tweets.page)
-    return render_template('tweets.html', tweet=tweet, tweets=tweets)
+    return render_template('tweets.html', tweets=tweets)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -151,9 +154,20 @@ def upload():
     form = UploadForm()
     if form.validate_on_submit():
         data = form.collection_file.data
-        filename = secure_filename(data.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        data.save(file_path)
+        collection = Collection()
+        collection.name = form.name.data
+        collection.organization = form.organization.data
+        collection.description = form.description.data
+        collection.collection_type = form.collection_type.data
+        collection.keywords = form.keywords.data
+        collection.country = form.country.data
+        collection.year = form.year.data
+        collection.tags = form.tags.data
+        # filename = secure_filename(data.filename)
+        # file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        # data.save(file_path)
+        tsv.process_tsv(data, chunk_size=1000, collection=collection)
+        flash('The collection was saved successfully.')
 
     else:
         filename = None

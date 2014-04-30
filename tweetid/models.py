@@ -33,13 +33,14 @@ class ModelMixin(object):
         db.session.delete(self)
         db.session.commit()
 
-    def all(self):
-        return self.query.all()
+    @classmethod
+    def all(cls):
+        return cls.query.all()
 
 
 association_table = db.Table(
     'association',
-    db.Column('collection_id', db.Integer, db.ForeignKey('collection.id')),
+    db.Column('collection_name', db.Integer, db.ForeignKey('collection.name')),
     db.Column('tweet_id', db.String, db.ForeignKey('tweet.id')))
 
 
@@ -62,10 +63,20 @@ class Tweet(ModelMixin, db.Model):
     #         self.url_mentions = url_mentions
 
     def __repr__(self):
-        return "<Tweet(id='%s')" % self.id
+        return "<Tweet(id='%s')>" % self.id
 
 
 class Collection(ModelMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, primary_key=True, index=True)
+    organization = db.Column(db.String, index=True)
+    description = db.Column(db.String)
+    collection_type = db.Column(db.String)
+    keywords = db.Column(db.String)
+    country = db.Column(db.String)
+    year = db.Column(db.Integer)
+    tags = db.Column(db.String)
     tweets = db.relationship('Tweet', secondary=association_table, lazy='dynamic',
                              backref=db.backref('collections', lazy='dynamic'))
+
+    def __repr__(self):
+        return "<Collection(name='%s')>" % self.name

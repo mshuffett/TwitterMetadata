@@ -16,6 +16,7 @@ class BaseConfig(object):
 
     LOG_FOLDER = INSTANCE_FOLDER_PATH + '/logs'
     make_dir(LOG_FOLDER)
+    SECRET_KEY = 'foomanchu'
 
 
 class DefaultConfig(BaseConfig):
