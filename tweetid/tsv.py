@@ -49,8 +49,13 @@ def process_tsv(fp, count=0, chunk_size=0, collection=None):
         collection = Collection()
     gen = tsv_tweet_gen(fp, count=count)
     for i, tweet in enumerate(gen, 1):
-        tweet.collections.append(collection)
-        db.session.merge(tweet)
+        existing_tweet = Tweet.query.get(tweet.id)
+        if existing_tweet is None:
+            tweet.collections.append(collection)
+            db.session.add(tweet)
+        else:
+            existing_tweet.collections.append(collection)
+            db.session.add(existing_tweet)
         if chunk_size > 0 and i % chunk_size == 0:
             db.session.commit()
 
