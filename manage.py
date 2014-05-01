@@ -14,9 +14,12 @@ manager = Manager(app)
 @manager.command
 def load_tsv():
     """Load tsv"""
-    c = Collection(name='Queensland Floods', organization='QCRI', collection_type='keyword',
-                   keywords='#qldflood,#bigwet,queensland flood,australia flood, Missing, #qldfloods, #Bundaberg, queensland, #floods',
-                   year=2013, country='Australia')
+    # c = Collection(name='Queensland Floods', organization='QCRI', collection_type='keyword',
+    #                keywords='#qldflood,#bigwet,queensland flood,australia flood, Missing, #qldfloods, #Bundaberg, queensland, #floods',
+    #                year=2013, country='Australia')
+    c = Collection(name='Oklahoma Tornado', organization='QCRI', collection_type='keyword',
+                   keywords='oklahoma tornado, oklahoma storm, oklahoma relief, oklahoma volunteer, oklahoma disaster, #moore, moore relief, moore storm, moore tornado, moore flood, moore disaster, moore volunteer, #okc relief, #okc disaster, #okc tornado, #okc flood, #okc volunteer, #okc storm, #okwx, tornado, shawnee, norman, pottawatomie, mary fallin, #okc, #okneeds, #okhaves, #ok, #okhaves, #ok tornado, #ok relief, #ok flood, #ok disaster, #ok volunteer, #ok storm',
+                   year=2013, country='US')
     process_tsv(sys.stdin, chunk_size=1000, collection=c)
 
 

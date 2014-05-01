@@ -149,6 +149,11 @@ def tweets():
     return render_template('tweets.html', tweets=tweets)
 
 
+@app.route('/tweets/<tweet_id>', methods=['GET', 'POST'])
+def tweet(tweet_id):
+    return render_template('single_tweet.html', tweet=Tweet.query.get(tweet_id))
+
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     form = UploadForm()
@@ -168,10 +173,7 @@ def upload():
         # data.save(file_path)
         tsv.process_tsv(data, chunk_size=1000, collection=collection)
         flash('The collection was saved successfully.')
-
-    else:
-        filename = None
-    return render_template('upload.html', form=form, filename=filename)
+    return render_template('upload.html', form=form)
 
 
 @app.route('/about', methods=['GET', 'POST'])

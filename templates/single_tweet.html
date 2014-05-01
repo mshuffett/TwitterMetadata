@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="col-md-8 col-md-offset-2">
+    <div class="center">
+        <h1>Tweet ID {{ tweet.id }}</h1>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <dl>
+                <dt>ID</dt>
+                <dd>{{ tweet.id }}</dd>
+                {% if tweet.created_at %}
+                    <dt>Created</dt>
+                    <dd>{{ tweet.created_at }}</dd>
+                {% endif %}
+                {% if tweet.screen_name %}
+                    <dt>Screen Name</dt>
+                    <dd>{{ tweet.screen_name }}</dd>
+                {% endif %}
+                {% if tweet.latitude %}
+                    <dt>Latitude</dt>
+                    <dd>{{ tweet.latitude }}</dd>
+                {% endif %}
+                {% if tweet.longitude %}
+                    <dt>Longitude</dt>
+                    <dd>{{ tweet.longitude }}</dd>
+                {% endif %}
+                {% if tweet.url_mentions %}
+                    <dt>URL Mentions</dt>
+                    <dd>{{ tweet.url_mentions }}</dd>
+                {% endif %}
+                {% if tweet.collections %}
+                    <dt>Collections</dt>
+                    <dd>
+                        {%- for collection in tweet.collections %}
+                            <a href="{{ url_for('collection', name=collection.name) }}">
+                                {% if loop.last %}
+                                    {{ collection.name }}
+                                {% else %}
+                                    {{ collection.name + ', ' }}
+                                {% endif %}
+                            </a>
+                        {% endfor %}
+                    </dd>
+                {% endif %}
+            </dl>
+        </div>
+    </div>
+{% endblock %}

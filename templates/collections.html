@@ -75,7 +75,7 @@
                                 <tbody>
                                 {% for item in tweets %}
                                     <tr>
-                                        <th>{{ item.id }}</th>
+                                        <th><a href="{{ url_for('tweet', tweet_id=item.id) }}">{{ item.id }}</a></th>
                                         <th>{{ item.created_at }}</th>
                                         <th>{{ item.screen_name }}</th>
                                         <th>{{ item.latitude }}</th>
