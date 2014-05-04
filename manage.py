@@ -4,6 +4,7 @@ import sys
 from flask.ext.script import Manager
 
 from tweetid import app, db
+from tweetid.load_json import load_json
 from tweetid.models import Collection
 from tweetid.tsv import process_tsv
 
@@ -41,10 +42,18 @@ def drop_all():
     db.drop_all()
 
 
+@manager.command
+def import_json(name):
+    """Load json from stdin"""
+    print 'Importing VT Oklahoma Torando'
+    load_json(sys.stdin, name, chunk_size=1)
+
+
 manager.add_option('-c', '--config',
                    dest="config",
                    required=False,
                    help="config file")
+
 
 if __name__ == "__main__":
     manager.run()
