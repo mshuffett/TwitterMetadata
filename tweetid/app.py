@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from collections import defaultdict
+import json
 import os
 
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 from config import DefaultConfig, INSTANCE_FOLDER_PATH
 from werkzeug.utils import secure_filename
@@ -151,7 +152,8 @@ def tweets():
 
 @app.route('/tweets/<tweet_id>', methods=['GET', 'POST'])
 def tweet(tweet_id):
-    return render_template('single_tweet.html', tweet=Tweet.query.get(tweet_id))
+    tweet = Tweet.query.get(tweet_id)
+    return render_template('single_tweet.html', tweet=tweet, tweet_json=json.dumps(tweet.serialize, indent=4))
 
 
 @app.route('/upload', methods=['GET', 'POST'])

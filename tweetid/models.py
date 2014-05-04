@@ -52,15 +52,25 @@ class Tweet(ModelMixin, db.Model):
     longitude = db.Column(db.String)
     url_mentions = db.Column(db.String)
 
-    # def __init__(self, id, text, created_at, screen_name, latitude, longitude, url_mentions=None):
-    #     self.id = id
-    #     self.text = text
-    #     self.created_at = created_at
-    #     self.screen_name = screen_name
-    #     self.latitude = latitude
-    #     self.longitude = longitude
-    #     if url_mentions is not None:
-    #         self.url_mentions = url_mentions
+    @property
+    def serialize(self):
+        """Return object in easily serializable format."""
+        return {
+            'twitter': {
+                'id_str': self.id,
+                'created_at': self.created_at,
+                'screen_name': self.screen_name,
+                'coordinates': {
+                    'coordinates': [float(self.longitude), float(self.latitude)],
+                    'type': 'Point'},
+                'entities': {
+                    'urls': [{'expanded_url': mention for mention in self.url_mentions.split(' ')}]
+                }
+            },
+            'tweetid': {
+                'collections': [collection.name for collection in self.collections]
+            }
+        }
 
     def __repr__(self):
         return "<Tweet(id='%s')>" % self.id
