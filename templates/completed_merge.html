@@ -1,0 +1,57 @@
+{% from "pagination.html" import render_pagination %}
+<div class="col-md-8 col-md-offset-2">
+    <div class="center">
+        <h1>{{ '%s and %s Merged'|format(c1.name, c2.name) }}</h1>
+
+        <p class="tweets-count">{{ tweets.total }} total</p>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <dl>
+                <dt>Organizations</dt>
+                <dd>{{ c1.organization + ', ' + c2.organization }}</dd>
+                <dt>Collection Type</dt>
+                <dd>{{ c1.collection_type }}</dd>
+                <dt>Keywords</dt>
+                <dd>{{ keywords }}</dd>
+                <dt>Year</dt>
+                <dd>{{ c1.year }}</dd>
+                <dt>Country</dt>
+                <dd>{{ c1.country }}</dd>
+                {% if c1.tags %}
+                    <dt>Tags</dt>
+                    <dd>{{ c1.tags }}</dd>
+                {% endif %}
+            </dl>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Created</th>
+                <th>Screen Name</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>URL Mentions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in tweets.items %}
+                <tr>
+                    <th><a href="{{ url_for('tweet', tweet_id=item.id) }}">{{ item.id }}</a></th>
+                    <th>{{ item.created_at }}</th>
+                    <th>{{ item.screen_name }}</th>
+                    <th>{{ item.latitude }}</th>
+                    <th>{{ item.longitude }}</th>
+                    <th>{{ item.url_mentions }}</th>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+        <div class="center">
+            {{ render_pagination(tweets, 'collection', name=c1.name) }}
+        </div>
+    </div>
+</div>

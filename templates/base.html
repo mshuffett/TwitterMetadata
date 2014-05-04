@@ -54,3 +54,8 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     {{ fixes.ie8() }}
 {% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">$SCRIPT_ROOT = {{ request.script_root|tojson|safe }}</script>
+    {{ super() }}
+{% endblock %}

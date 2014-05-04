@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="container">
+        <div class="center" id="loading">
+            <h2>Merging Collections</h2>
+            <img src="{{ url_for('static', filename='loading.GIF') }}" alt=""/>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='purl.js') }}"></script>
+    <script src="{{ url_for('static', filename='merge.js') }}"></script>
+{% endblock %}

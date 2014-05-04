@@ -186,3 +186,19 @@ def about():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     return render_template('contact.html')
+
+
+@app.route('/merge', methods=['GET', 'POST'])
+def merge():
+    return render_template('merge.html')
+
+
+@app.route('/do_merge', methods=['POST'])
+def do_merge():
+    app.logger.info('Merging')
+    c1 = Collection.query.get(request.form['c1'])
+    c2 = Collection.query.get(request.form['c2'])
+    tweets = c1.tweets.union(c2.tweets).paginate(1)
+    keywords = {k.strip() for k in c1.keywords.split(',')}
+    keywords.update(k.strip() for k in c2.keywords.split(','))
+    return render_template('completed_merge.html', c1=c1, c2=c2, tweets=tweets, keywords=', '.join(keywords))

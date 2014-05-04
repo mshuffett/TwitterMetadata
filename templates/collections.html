@@ -21,13 +21,18 @@
             {% for collection in org_d[org] %}
                 {% set current_collapse = '%s%s' % (base_collapse, loop.index) %}
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
+                    <div class="panel-heading collections-panel-heading">
+                        <h3 class="panel-title collections-panel-title">
                             <a data-toggle="collapse" data-parent="{{ parent_accordion }}"
                                href="{{ '#' + current_collapse }}">
                                 {{ collection.name }}
                             </a>
                         </h3>
+
+                        <div class="btn-group btn-toggle">
+                            <button class="btn btn-xs btn-default">Merge</button>
+                            <button class="btn btn-xs btn-primary active">Don't Merge</button>
+                        </div>
                     </div>
                     <div id="{{ current_collapse }}" class="panel-collapse collapse {{ 'in' if loop.index == 1 }}">
                         <div class="panel-body">
@@ -93,5 +98,13 @@
                 </div>
             {% endfor %}
         {% endfor %}
+        <div class="center">
+            <button type="button" class="btn btn-primary btn-lg hidden" id="merge-btn">Merge!</button>
+        </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='bootstrap-toggle.js') }}"></script>
 {% endblock %}
