@@ -2,18 +2,21 @@
 # -*- coding: utf-8 -*-
 
 from collections import defaultdict
+
 import json
 import os
 
-from flask import Flask, render_template, request, flash, jsonify
+from flask import Flask, render_template, request, flash
 from flask.ext.sqlalchemy import SQLAlchemy
-from config import DefaultConfig, INSTANCE_FOLDER_PATH
-from werkzeug.utils import secure_filename
 from flask_bootstrap import Bootstrap
 from wtforms import TextField, TextAreaField, SubmitField, SelectField
 from flask_wtf import Form
 from wtforms.validators import DataRequired
+
 from flask_wtf.file import FileField, FileAllowed, FileRequired
+from dateutil.parser import parse
+
+from config import DefaultConfig, INSTANCE_FOLDER_PATH
 
 
 __all__ = ['app', 'db']
@@ -201,4 +204,7 @@ def do_merge():
     tweets = c1.tweets.union(c2.tweets).paginate(1)
     keywords = {k.strip() for k in c1.keywords.split(',')}
     keywords.update(k.strip() for k in c2.keywords.split(','))
-    return render_template('completed_merge.html', c1=c1, c2=c2, tweets=tweets, keywords=', '.join(keywords))
+    first_date = min(parse(c1.first_tweet_date), parse(c2.first_tweet_date)).isoformat()
+    last_date = max(parse(c1.last_tweet_date), parse(c2.last_tweet_date)).isoformat()
+    return render_template('completed_merge.html', c1=c1, c2=c2, tweets=tweets, keywords=', '.join(keywords),
+                           first_date=first_date, last_date=last_date)

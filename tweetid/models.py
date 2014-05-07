@@ -87,6 +87,8 @@ class Collection(ModelMixin, db.Model):
     tags = db.Column(db.String)
     tweets = db.relationship('Tweet', secondary=association_table, lazy='dynamic',
                              backref=db.backref('collections', lazy='dynamic'))
+    first_tweet_date = db.Column(db.String)
+    last_tweet_date = db.Column(db.String)
 
     def __repr__(self):
         return "<Collection(name='%s')>" % self.name
