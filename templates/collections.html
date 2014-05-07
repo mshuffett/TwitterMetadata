@@ -61,6 +61,14 @@
                                     <dt>Tags</dt>
                                     <dd>{{ collection.tags }}</dd>
                                 {% endif %}
+                                {% if collection.first_tweet_date %}
+                                    <dt>First Tweet Date</dt>
+                                    <dd>{{ collection.first_tweet_date }}</dd>
+                                {% endif %}
+                                {% if collection.last_tweet_date %}
+                                    <dt>Last Tweet Date</dt>
+                                    <dd>{{ collection.last_tweet_date }}</dd>
+                                {% endif %}
                             </dl>
                         </div>
                         {% set tweets = collection.tweets.limit(10).all() %}
